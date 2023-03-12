@@ -2,13 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:frontend/pages/Authentication/Login.dart';
-import 'package:frontend/pages/MyHomepage.dart';
+import 'package:frontend/pages/Home/MyHomepage.dart';
 
 void main() {
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(), // Wrap your app
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "BeVietnamPro"),
       initialRoute: "/login",
       routes: {
-        "/login": (context) => const Login(),
+        "/login": (context) => SafeArea(
+            minimum: const EdgeInsets.fromLTRB(0, 20, 0, 0), child: Login()),
         "/home": (context) => const MyHomePage(title: "Gym Management")
       },
     );
