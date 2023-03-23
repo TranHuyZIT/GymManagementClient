@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:frontend/pages/Authentication/Login.dart';
 import 'package:frontend/pages/Home/MyHomepage.dart';
+import 'package:frontend/pages/Invoices/InvoicesPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context) => SafeArea(
             minimum: const EdgeInsets.fromLTRB(0, 20, 0, 0), child: Login()),
-        "/home": (context) => const MyHomePage(title: "Gym Management")
+        "/home": (context) => const MyHomePage(title: "Gym Management"),
+        "/invoices": (context) => InvoicesPage()
       },
     );
   }

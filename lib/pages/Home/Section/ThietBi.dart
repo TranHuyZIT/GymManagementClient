@@ -1,6 +1,8 @@
 import 'package:easy_pagination_datatable/datatable.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Services/thietbi.service.dart';
 import 'package:frontend/pages/Home/Form/ThietBi.form.dart';
+import 'package:http/http.dart';
 import '../DataSource/ThietBi.dart';
 
 class ThietBiSection extends StatefulWidget {
@@ -19,6 +21,12 @@ class _ThietBiSectionState extends State<ThietBiSection> {
 
   var sortAsc = true;
 
+  void delete(id, context)async {
+    await ThietBiService.delete(id, context);
+    setState(() {
+    });
+  }
+
   DataRow getRow(int index){
     final thietbi = source.lastDetails!.rows[index];
     return (
@@ -33,8 +41,20 @@ class _ThietBiSectionState extends State<ThietBiSection> {
                   arguments: thietbi
                 )));
               },),
-              IconButton(icon: const Icon(Icons.delete), onPressed: () {
-
+              IconButton(icon: const Icon(Icons.delete), onPressed: (){
+                showDialog(context: context, builder: (BuildContext context){
+                  return AlertDialog(
+                    title: Text("Xác Nhận Xóa"),
+                    content: Text("Bạn có chắc chắn muốn xóa thiết bị này không", style: TextStyle(fontSize: 20),),
+                    actions: [
+                      ElevatedButton(onPressed: (){
+                        delete(thietbi["_id"], context);
+                      },
+                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                          child: Text("Xóa"))
+                    ],
+                  );
+                });
               },),
             ],
           ))
@@ -47,15 +67,16 @@ class _ThietBiSectionState extends State<ThietBiSection> {
     sortAsc = asc;
   });
   void navigateToForm(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ThietBiForm()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ThietBiForm(), settings: const RouteSettings(
+        arguments: <String, dynamic>{}
+    )));
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-
-      body: SingleChildScrollView(
+    return Container(
+      child: SingleChildScrollView(
         child: Column(children: [
           Row(mainAxisAlignment: MainAxisAlignment.center,children: [
             const Text("Thiết Bị", style: TextStyle(fontSize: 25)),
@@ -74,7 +95,7 @@ class _ThietBiSectionState extends State<ThietBiSection> {
             sortColumnIndex: sortIndex,
             showFirstLastButtons: true,
             rowsPerPage: rowsPerPage,
-            availableRowsPerPage: const [15],
+            availableRowsPerPage: const [10, 15],
             onRowsPerPageChanged: (newRowsPerPage) {
               if (newRowsPerPage != null) {
                 setState(() {

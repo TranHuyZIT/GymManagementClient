@@ -3,10 +3,11 @@ import 'package:frontend/Services/CommonService.dart';
 import 'package:frontend/request.dart';
 import 'package:http/http.dart';
 import "dart:convert" as convert;
-class ThietBiService{
-  static Future<Map<String, dynamic>> getAll() async{
+class ThietBiPhongService{
+  // Unimplemented
+  static Future<Map<String,dynamic>> getAll() async{
     try{
-      Response response = await RequestUtil.request("get", "/thietbi");
+      Response response = await RequestUtil.request("get", "/thietbiphong");
       var jsonResponse =  convert.jsonDecode(response.body) as Map<String, dynamic>;
       return jsonResponse;
     }

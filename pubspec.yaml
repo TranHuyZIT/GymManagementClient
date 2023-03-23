@@ -39,6 +39,8 @@ dependencies:
   http: ^0.13.5
   localstorage: ^4.0.0+1
   easy_pagination_datatable: ^0.0.3+7
+  infinite_scroll_pagination: ^3.2.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

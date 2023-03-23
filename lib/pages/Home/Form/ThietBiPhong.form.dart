@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Services/CommonService.dart';
 import 'package:frontend/Services/prodCategoryService.dart';
 import 'package:frontend/Services/thietbi.service.dart';
+import 'package:frontend/Services/thietbiphong.service.dart';
+import 'package:frontend/Services/thietbiphong.service.dart';
 final _formKey = GlobalKey<FormState>();
 
 class ThietBiForm extends StatefulWidget{
@@ -22,22 +24,14 @@ class _ThietBiFormState extends State<ThietBiForm> {
 
   @override
   void initState() {
-    getCategories() async{
-      Map<String,dynamic> response = await ProductCategoryService.getAll();
-      allCategories = response["data"];
-      setState(() {
-        isLoading = false;
-      });
-    }
     // TODO: implement initState
     super.initState();
-    getCategories();
   }
 
   void save(context) async{
     if (_formKey.currentState!.validate()){
       if (id == ""){
-        dynamic response = await ThietBiService.add({
+        dynamic response = await ThietBiPhongService.add({
           "ten": name,
           "maloaitb": selectedLoaiTB
         }, context);
@@ -49,7 +43,7 @@ class _ThietBiFormState extends State<ThietBiForm> {
         return;
       }
       else{
-        dynamic response = await ThietBiService.update({
+        dynamic response = await ThietBiPhongService.update({
           "ten": name,
           "maloaitb": selectedLoaiTB,
           "_id": id
@@ -113,10 +107,10 @@ class _ThietBiFormState extends State<ThietBiForm> {
                             }),
                           ),
                           DropdownButtonFormField(
-                            value: selectedLoaiTB,
-                            decoration: const InputDecoration(icon: Icon(Icons.speaker_notes),
-                              labelText: "Chọn loại thiết bị*"
-                            ),
+                              value: selectedLoaiTB,
+                              decoration: const InputDecoration(icon: Icon(Icons.speaker_notes),
+                                  labelText: "Chọn loại thiết bị*"
+                              ),
                               validator: (value){
                                 if (value == null || value == "") {
                                   return "Chọn loại thiết bị";
@@ -142,18 +136,18 @@ class _ThietBiFormState extends State<ThietBiForm> {
           );
         }
         return Scaffold(
-          appBar: AppBar(title: const Text("Trần Huy Gym"),
-          ),
-          body: SizedBox(
-            width: 500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator()
-              ],
+            appBar: AppBar(title: const Text("Trần Huy Gym"),
             ),
-          )
+            body: SizedBox(
+              width: 500,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator()
+                ],
+              ),
+            )
         );
       },
     );

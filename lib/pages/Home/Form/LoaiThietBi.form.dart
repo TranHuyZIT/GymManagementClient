@@ -5,26 +5,23 @@ import 'package:frontend/Services/prodCategoryService.dart';
 import 'package:frontend/Services/thietbi.service.dart';
 final _formKey = GlobalKey<FormState>();
 
-class ThietBiForm extends StatefulWidget{
+class LoaiThietBiForm extends StatefulWidget{
 
-  const ThietBiForm({super.key});
+  const LoaiThietBiForm({super.key});
 
   @override
-  State<ThietBiForm> createState() => _ThietBiFormState();
+  State<LoaiThietBiForm> createState() => _LoaiThietBiFormState();
 }
 
-class _ThietBiFormState extends State<ThietBiForm> {
+class _LoaiThietBiFormState extends State<LoaiThietBiForm> {
   String name = "";
   String id = "";
-  dynamic selectedLoaiTB;
-  List<dynamic> allCategories = [];
   bool isLoading = true;
 
   @override
   void initState() {
     getCategories() async{
-      Map<String,dynamic> response = await ProductCategoryService.getAll();
-      allCategories = response["data"];
+
       setState(() {
         isLoading = false;
       });
@@ -37,13 +34,11 @@ class _ThietBiFormState extends State<ThietBiForm> {
   void save(context) async{
     if (_formKey.currentState!.validate()){
       if (id == ""){
-        dynamic response = await ThietBiService.add({
+        dynamic response = await ProductCategoryService.add({
           "ten": name,
-          "maloaitb": selectedLoaiTB
         }, context);
         setState(() {
           name = "";
-          selectedLoaiTB = null;
         });
         Navigator.pop(context);
         return;
@@ -51,18 +46,16 @@ class _ThietBiFormState extends State<ThietBiForm> {
       else{
         dynamic response = await ThietBiService.update({
           "ten": name,
-          "maloaitb": selectedLoaiTB,
           "_id": id
         }, context);
         setState(() {
           name = "";
-          selectedLoaiTB = null;
           id = "";
         });
         Navigator.pop(context);
       }
     }
-    CommonService.popUpMessage("Vui lòng kiểm tra lại thông tin thiết bị", context);
+    CommonService.popUpMessage("Vui lòng kiểm tra lại thông tin loại thiết bị", context);
   }
 
   @override
@@ -72,7 +65,6 @@ class _ThietBiFormState extends State<ThietBiForm> {
     if (currentData.isNotEmpty && id == ""){
       setState(() {
         name = currentData["ten"];
-        selectedLoaiTB = currentData["loaitb"]["_id"];
         id = currentData["_id"];
       });
     }
@@ -91,7 +83,7 @@ class _ThietBiFormState extends State<ThietBiForm> {
                     children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
-                        child: const Center(child: Text("Thiết Bị", style: TextStyle(fontSize: 35),)),
+                        child: const Center(child: Text("Loại Thiết Bị", style: TextStyle(fontSize: 35),)),
                       ),
                       Form(key: _formKey, autovalidateMode: AutovalidateMode.always, child: Column(
                         children: <Widget>[
@@ -105,34 +97,13 @@ class _ThietBiFormState extends State<ThietBiForm> {
                             },
                             decoration: const InputDecoration(
                                 icon: Icon(Icons.speaker_notes),
-                                hintText: 'Tên thiết bị *',
-                                labelText: 'Tên thiết bị *'
+                                hintText: 'Tên Thiết Bị *',
+                                labelText: 'Tên Thiết Bị *'
                             ),
                             onChanged:(value) => setState(() {
                               name = value;
                             }),
                           ),
-                          DropdownButtonFormField(
-                            value: selectedLoaiTB,
-                            decoration: const InputDecoration(icon: Icon(Icons.speaker_notes),
-                              labelText: "Chọn loại thiết bị*"
-                            ),
-                              validator: (value){
-                                if (value == null || value == "") {
-                                  return "Chọn loại thiết bị";
-                                }
-                                return null;
-                              }
-                              ,items: allCategories.map((prodCate){
-                            return DropdownMenuItem(
-                              value: prodCate["_id"],
-                              child: Text(prodCate["ten"]),
-                            );
-                          }).toList(), onChanged: (value){
-                            setState(() {
-                              selectedLoaiTB = value;
-                            });
-                          }),
                           ElevatedButton(onPressed: () => save(context), child: const Text("Lưu")),
                         ],
                       ))
@@ -142,18 +113,18 @@ class _ThietBiFormState extends State<ThietBiForm> {
           );
         }
         return Scaffold(
-          appBar: AppBar(title: const Text("Trần Huy Gym"),
-          ),
-          body: SizedBox(
-            width: 500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator()
-              ],
+            appBar: AppBar(title: const Text("Trần Huy Gym"),
             ),
-          )
+            body: SizedBox(
+              width: 500,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator()
+                ],
+              ),
+            )
         );
       },
     );

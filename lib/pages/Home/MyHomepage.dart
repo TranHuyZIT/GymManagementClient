@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/Home/Section/LoaiThietBi.dart';
 import 'package:frontend/pages/Home/Section/ThietBi.dart';
-import 'package:frontend/request.dart';
-import 'package:http/http.dart';
-import 'dart:convert' as convert;
-
-import 'package:localstorage/localstorage.dart';
+import '../Invoices/InvoicesPage.dart';
+import 'Section/ThietBiPhong.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -16,24 +14,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var prodCategories = [];
-  var products = [];
-  var facilityProducts = [];
-  final LocalStorage storage = new LocalStorage('app');
-  Future<void>  getAllProdCategories () async {
-    Response response = await RequestUtil.request("get", "/loaithietbi");
-    var jsonResponse =
-    convert.jsonDecode(response.body) as List<dynamic>;
+  Future<void> _refresh()async {
+    setState(() {
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    getAllProdCategories();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ThietBiSection(),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: ListView(
+          children: [
+            LoaiThietBiSection(),
+            ThietBiSection(),
+            ThietBiPhongSection()
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -59,7 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: 0,
         selectedItemColor: Colors.white,
-        onTap: (int currentIdx){},
+        onTap: (int currentIdx){
+          switch(currentIdx) {
+            case 0:
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  builder: (context) => MyHomePage(title: "Trần Huy Gym")),
+                  ModalRoute.withName('/home'));
+              break;
+            case 1:
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => InvoicesPage()),
+                  ModalRoute.withName('/invoices'));
+              break;
+          }
+        },
       ),
     );
   }
