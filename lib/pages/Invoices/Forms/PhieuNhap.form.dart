@@ -222,9 +222,10 @@ class _PhieuNhapFormState extends State<PhieuNhapForm> {
                       children: [
                         Expanded(flex: 1, child:
                         TextFormField(
+                          keyboardType: TextInputType.number,
                           initialValue: '0',
                           validator: (value) {
-                            if (value == null || value == '' || value == '0'  ){
+                            if (value == null || value == '' || value == '0'){
                               return "Giá nhập không hợp lệ";
                             }
                             return null;

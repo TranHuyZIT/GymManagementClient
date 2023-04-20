@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Services/CommonService.dart';
-import 'package:frontend/Services/phieukiemtra.service.dart';
-import 'package:frontend/pages/Invoices/Forms/PhieuKiemTra.form.dart';
+
 
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../Services/PhieuNhap.service.dart';
+import '../../../Services/HoaDon.service.dart';
+import '../Forms/HoaDon.form.dart';
 
-class PhieuKiemTra extends StatefulWidget{
-  const PhieuKiemTra({super.key});
+class HoaDon extends StatefulWidget{
+  const HoaDon({super.key});
 
   @override
-  State<PhieuKiemTra> createState() => _PhieuKiemTraState();
+  State<HoaDon> createState() => _HoaDonState();
 }
 
-class _PhieuKiemTraState extends State<PhieuKiemTra> {
+class _HoaDonState extends State<HoaDon> {
   final PagingController<int, dynamic> _pagingController =
   PagingController(firstPageKey: 0);
   static const _pageSize = 5;
@@ -34,7 +34,7 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
         'offset': pageKey.toString(),
         'pageSize': _pageSize.toString(),
       };
-      final newItems = await PhieuKiemTraService.getAll(queries: queryParameter);
+      final newItems = await HoaDonService.getAll(queries: queryParameter);
       final isLastPage = newItems["data"].length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems["data"]);
@@ -61,7 +61,7 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PhieuKiemTraForm(), settings: const RouteSettings(
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonForm(), settings: const RouteSettings(
                             arguments: <String, dynamic>{}
                         )));
                       }, label: const Text("Thêm"), icon: const Icon(Icons.add),),
@@ -82,11 +82,12 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                             children: <Widget>[
                               ListTile(
                                 leading: const Icon(Icons.post_add),
-                                title: Text('Phiếu Kiểm Tra #${item["id"]}'),
-                                subtitle: Text('Ghi chú: ${item["ghichu"]}'),
+                                title: Text('Hóa Đơn #${item["id"]}  ${CommonService.convertISOToDateOnly(item["ngaylap"] ?? '')}'),
+                                subtitle: Text('Tổng tiền: ${item["tongtien"].toString()}'),
                                 trailing: Column(
                                   children: [
-                                    Text('Ngày ${CommonService.convertISOToDateOnly(item["ngaykiemtra"] ?? '')}'),
+                                    const Text('Nhân viên'),
+                                    Text('${item["manv"]["ten"]} # ${item["manv"]["id"]}'),
                                   ],
                                 ),
                               ),
@@ -108,7 +109,7 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                                       showDialog(context: context, builder: (BuildContext context){
                                         return AlertDialog(
                                           title: const Text("Xác Nhận Xóa"),
-                                          content: const Text("Bạn có chắc chắn muốn xóa phiếu kiểm tra này không?", style: TextStyle(fontSize: 12),),
+                                          content: const Text("Bạn có chắc chắn muốn xóa hóa đơn này không?", style: TextStyle(fontSize: 12),),
                                           actions: [
                                             ElevatedButton(onPressed: (){
                                               delete(item["_id"], context);
@@ -140,12 +141,12 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
     initState();
   }
   void delete(String id, context)async{
-    var jsonResponse = await PhieuNhapService.delete(id, context);
-
+    var jsonResponse = await HoaDonService.delete(id);
+    CommonService.popUpMessage("Xóa hóa đơn thành công", context);
   }
-  void view(phieukiemtra){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => PhieuKiemTraForm(), settings: RouteSettings(
-        arguments: phieukiemtra
+  void view(hoadon){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonForm(), settings: RouteSettings(
+        arguments: hoadon
     )));
   }
   @override

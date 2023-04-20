@@ -24,21 +24,23 @@ class _PhieuNhapState extends State<PhieuNhap> {
       _fetchPage(pageKey);
     });
     super.initState();
+
   }
 
   Future<void> _fetchPage(int pageKey) async {
     try {
+      print(pageKey);
       final queryParameter = <String, dynamic>{
         'offset': pageKey.toString(),
         'pageSize': _pageSize.toString(),
       };
       final newItems = await PhieuNhapService.getAll(queries: queryParameter);
-      final isLastPage = newItems.length < _pageSize;
+      final isLastPage = newItems["data"].length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems["data"]);
       } else {
-        final nextPageKey = pageKey + newItems.length;
-        _pagingController.appendPage(newItems["data"], nextPageKey);
+        final nextPageKey = pageKey + newItems["data"].length;
+        _pagingController.appendPage(newItems["data"], nextPageKey as int?);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -52,7 +54,6 @@ class _PhieuNhapState extends State<PhieuNhap> {
       Scaffold(
         appBar: AppBar(title: const Text("Trần Huy Gym"),),
         body: RefreshIndicator(
-
           onRefresh: _refresh,
           child: Column(
             children: [
@@ -138,7 +139,7 @@ class _PhieuNhapState extends State<PhieuNhap> {
     );
   }
   Future <void> _refresh()async {
-    initState();
+   await _fetchPage(0);
   }
   void delete(String id, context)async{
     var jsonResponse = await PhieuNhapService.delete(id, context);

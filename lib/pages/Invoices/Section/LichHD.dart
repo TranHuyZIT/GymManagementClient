@@ -1,21 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Services/CommonService.dart';
-import 'package:frontend/Services/phieukiemtra.service.dart';
-import 'package:frontend/pages/Invoices/Forms/PhieuKiemTra.form.dart';
+import 'package:frontend/pages/Invoices/Forms/LichHD.view.dart';
+
 
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../Services/PhieuNhap.service.dart';
+import '../../../Services/HoaDon.service.dart';
+import '../../../Services/LichHD.service.dart';
+import '../Forms/HoaDon.form.dart';
+import '../Forms/LichHD.form.dart';
 
-class PhieuKiemTra extends StatefulWidget{
-  const PhieuKiemTra({super.key});
+class LichHD extends StatefulWidget{
+  const LichHD({super.key});
 
   @override
-  State<PhieuKiemTra> createState() => _PhieuKiemTraState();
+  State<LichHD> createState() => _LichHDState();
 }
 
-class _PhieuKiemTraState extends State<PhieuKiemTra> {
+class _LichHDState extends State<LichHD> {
   final PagingController<int, dynamic> _pagingController =
   PagingController(firstPageKey: 0);
   static const _pageSize = 5;
@@ -34,7 +37,7 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
         'offset': pageKey.toString(),
         'pageSize': _pageSize.toString(),
       };
-      final newItems = await PhieuKiemTraService.getAll(queries: queryParameter);
+      final newItems = await LichHDService.getAll(queries: queryParameter);
       final isLastPage = newItems["data"].length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems["data"]);
@@ -61,8 +64,8 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PhieuKiemTraForm(), settings: const RouteSettings(
-                            arguments: <String, dynamic>{}
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LichHDForm(), settings: const RouteSettings(
+                            arguments: ""
                         )));
                       }, label: const Text("Thêm"), icon: const Icon(Icons.add),),
                       const SizedBox(width: 8,)
@@ -81,14 +84,15 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               ListTile(
-                                leading: const Icon(Icons.post_add),
-                                title: Text('Phiếu Kiểm Tra #${item["id"]}'),
-                                subtitle: Text('Ghi chú: ${item["ghichu"]}'),
-                                trailing: Column(
+                                leading: const Icon(Icons.timeline),
+                                title: Text('Lịch hướng dẫn'),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Ngày ${CommonService.convertISOToDateOnly(item["ngaykiemtra"] ?? '')}'),
+                                    Text("Ngày bắt đầu: ${CommonService.convertISOToDateOnly(item["ngaybd"] ?? '')}"),
+                                    Text("Ngày kết thúc: ${CommonService.convertISOToDateOnly(item["ngaykt"] ?? '')}"),
                                   ],
-                                ),
+                                )
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -108,7 +112,7 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
                                       showDialog(context: context, builder: (BuildContext context){
                                         return AlertDialog(
                                           title: const Text("Xác Nhận Xóa"),
-                                          content: const Text("Bạn có chắc chắn muốn xóa phiếu kiểm tra này không?", style: TextStyle(fontSize: 12),),
+                                          content: const Text("Bạn có chắc chắn muốn xóa lịch hướng dẫn này không?", style: TextStyle(fontSize: 12),),
                                           actions: [
                                             ElevatedButton(onPressed: (){
                                               delete(item["_id"], context);
@@ -137,16 +141,14 @@ class _PhieuKiemTraState extends State<PhieuKiemTra> {
     );
   }
   Future <void> _refresh()async {
-    initState();
+    await _fetchPage(0);
   }
   void delete(String id, context)async{
-    var jsonResponse = await PhieuNhapService.delete(id, context);
-
+    var jsonResponse = await LichHDService.delete(id);
+    CommonService.popUpMessage("Xóa lịch hướng dẫn thành công", context);
   }
-  void view(phieukiemtra){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => PhieuKiemTraForm(), settings: RouteSettings(
-        arguments: phieukiemtra
-    )));
+  void view(lichhd){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LichHDView(currentData: lichhd["_id"],)));
   }
   @override
   void dispose() {

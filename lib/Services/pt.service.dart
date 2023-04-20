@@ -1,10 +1,10 @@
 import 'package:frontend/request.dart';
 import 'package:http/http.dart';
 import "dart:convert" as convert;
-class NhanVienService{
+class PTService{
   static Future<Map<String, dynamic>> getAll({queries}) async{
     try{
-      Response response = await RequestUtil.request("get", "/nhanvien", queries: queries);
+      Response response = await RequestUtil.request("get", "/pt", queries: queries);
       var jsonResponse = convert.jsonDecode(response.body);
       return jsonResponse;
     }
@@ -15,7 +15,7 @@ class NhanVienService{
   }
   static Future<Map<String, dynamic>> add(body) async{
     try{
-      Response response = await RequestUtil.request("post", "/nhanvien", body: convert.jsonEncode(body), encoded:true);
+      Response response = await RequestUtil.request("post", "/pt", body: convert.jsonEncode(body), encoded:true);
       var jsonResponse = convert.jsonDecode(response.body);
       return jsonResponse;
     }

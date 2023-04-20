@@ -19,28 +19,29 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
   Map<String, dynamic> nhanvien = <String, dynamic>{};
   List<dynamic> thietbiphongs = [];
   String manv = '';
-  String selectedTinhTrang = '';
+  String selectedTinhTrang = MachineStatus.defaultStatus;
   DateTime? ngaylap;
+  String ghichu = "";
   List<dynamic> chitiet = [
   ];
 
 
   dynamic dropDownSelectedId;
   dynamic dropDownSelectedName;
-  dynamic tinhtrang;
+  String tinhtrang = MachineStatus.defaultStatus;
+  getIdentity() async{
+    var jsonResponse = await AuthService.getIdentity();
+    if (!jsonResponse.keys.contains("message")){
+      setState(() {
+        nhanvien = jsonResponse["info"];
+        manv = nhanvien["_id"].toString();
+      });
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
-    getIdentity() async{
-      var jsonResponse = await AuthService.getIdentity();
-      if (!jsonResponse.keys.contains("message")){
-        print(jsonResponse);
-        setState(() {
-          nhanvien = jsonResponse;
-          manv = nhanvien["info"]["id"].toString();
-        });
-      }
-    }
+
     getThietBis() async{
       var jsonResponse = await ThietBiPhongService.getAll();
       if (!jsonResponse.keys.contains("message")){
@@ -80,6 +81,7 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
           text: CommonService.convertISOToDateOnly(DateTime.tryParse(currentData["ngaykiemtra"]).toString())
       );
       setState(() {
+        ghichu = currentData["ghichu"];
         nhanvien = currentData["nhanvien"];
         ngaylap = DateTime.tryParse(currentData["ngaykiemtra"]);
         chitiet = currentData["chitiet"].map((ele){
@@ -89,6 +91,7 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
             "mathietbiphong": ele["thietbiphong"]["id"].toString()
           };
         }).toList();
+        getIdentity();
       });
     }
     return (
@@ -111,11 +114,25 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
                               children: [
                                 const Text("Phiếu Kiểm Tra", style: TextStyle(fontSize: 35)),
                                 TextFormField(
+                                  initialValue: ghichu,
+                                  enabled: currentData.isEmpty,
+                                  decoration:  const InputDecoration(
+                                      icon: Icon(Icons.note),
+                                      labelText: 'Ghi chú',
+                                      helperText: 'Ghi chú'
+                                  ),
+                                  onChanged: (value){
+                                    setState(() {
+                                      ghichu = value;
+                                    });
+                                  },
+                                ),
+                                TextFormField(
                                   enabled: false,
                                   initialValue: manv,
                                   decoration:  InputDecoration(
                                       icon: const Icon(Icons.person),
-                                      labelText: '${nhanvien["ten"]} - #${manv}',
+                                      labelText: '${nhanvien["ten"]}',
                                       helperText: 'Nhân viên'
                                   ),
                                 ),
@@ -184,7 +201,7 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
                                     Card(
                                       child: ListTile(
                                         title: Text(chitiet[index]["ten"]),
-                                        subtitle: Text(CommonService.formatVND(chitiet[index]["tinhtrang"])),
+                                        subtitle: Text(chitiet[index]["tinhtrang"]),
                                         leading: const Icon(Icons.info),
                                       ),
                                     )
@@ -237,10 +254,10 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
                                             }
                                             return null;
                                           }
-                                          ,items: MachineStatus.getAllStatus().map((String tinhtrang){
+                                          ,items: MachineStatus.getAllStatus().map((String tinhtrangOption){
                                         return DropdownMenuItem(
-                                          value: tinhtrang,
-                                          child: Text(tinhtrang),
+                                          value: tinhtrangOption,
+                                          child: Text(tinhtrangOption),
                                         );
                                       }).toList(), onChanged: ( value){
                                         setState(() {
@@ -251,9 +268,9 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
                               Expanded(flex: 1, child: ElevatedButton(onPressed: (){
                                 setState(() {
                                   chitiet.add({
-                                    "tinhtrang": tinhtrang,
+                                    "tinhtrang": selectedTinhTrang,
                                     "ten": dropDownSelectedName,
-                                    "matb": dropDownSelectedId
+                                    "mathietbiphong": dropDownSelectedId
                                   });
                                 });
                               }, child: const Text("Thêm")))
@@ -283,8 +300,12 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
     if (_formKey.currentState!.validate()){
       Map<String, dynamic> response = await PhieuKiemTraService.add({
         "ngaykiemtra": ngaylap?.toIso8601String(),
+        "ghichu": ghichu,
         "manv": manv,
-        "chitiet": chitiet
+        "chitiet": chitiet.map((e) => ({
+          "mathietbiphong": e["mathietbiphong"],
+          "tinhtrang": e["tinhtrang"]
+        })).toList()
       });
       setState(() {
         chitiet = [];

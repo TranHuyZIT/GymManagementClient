@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/Home/Section/GoiPT.dart';
+import 'package:frontend/pages/Home/Section/GoiTap.dart';
 import 'package:frontend/pages/Home/Section/LoaiThietBi.dart';
 import 'package:frontend/pages/Home/Section/ThietBi.dart';
+import 'package:frontend/pages/Shared/BottomNavigationBar.dart';
+import 'package:frontend/pages/Users/UsersPage.dart';
+import '../../core/Colors.Hex_Color.dart';
 import '../Invoices/InvoicesPage.dart';
 import 'Section/ThietBiPhong.dart';
 
@@ -22,60 +27,63 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: ListView(
-          children: [
-            LoaiThietBiSection(),
-            ThietBiSection(),
-            ThietBiPhongSection()
-          ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          bottom: const TabBar(tabs: [
+            Tab(text: "Trang Thiết Bị"),
+            Tab(text: "Thiết Bị Phòng"),
+            Tab(text: "Gói Tập và PT"),
+          ]),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Phòng Tập',
-            backgroundColor: Colors.blue,
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Container(
+          decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
+            image: const NetworkImage(
+            'https://mir-s3-cdn-cf.behance.net/project_modules/fs/01b4bd84253993.5d56acc35e143.jpg',
+            ),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.feed),
-            label: 'Phiếu Lập',
-            backgroundColor: Colors.blue,
+            child: Center(
+              child: Card(
+                elevation: 5,
+                child: TabBarView(
+                  children: [
+                    ListView(
+                      children: [
+                        LoaiThietBiSection(),
+                        ThietBiSection(),
+                      ],
+                    ),
+                    ListView(
+                      children: [
+                        ThietBiPhongSection(),
+                      ],
+                    ),
+                    ListView(
+                      children: [
+                        GoiTapSection(),
+                        GoiPTSection()
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Thống Kê',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Quản Trị',
-            backgroundColor: Colors.blue,
-          ),
-        ],
-        currentIndex: 0,
-        selectedItemColor: Colors.white,
-        onTap: (int currentIdx){
-          switch(currentIdx) {
-            case 0:
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  builder: (context) => MyHomePage(title: "Trần Huy Gym")),
-                  ModalRoute.withName('/home'));
-              break;
-            case 1:
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) => InvoicesPage()),
-                  ModalRoute.withName('/invoices'));
-              break;
-          }
-        },
-      ),
-    );
+        bottomNavigationBar: BottomNavigationShared(currentIndex: 1,),
+        ),
+      );
   }
 }
+
+
+

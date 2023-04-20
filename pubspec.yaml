@@ -41,6 +41,13 @@ dependencies:
   easy_pagination_datatable: ^0.0.3+7
   infinite_scroll_pagination: ^3.2.0
   intl: ^0.17.0
+  flutter_datetime_picker: ^1.5.1
+  simple_animations: ^4.1.0
+  supercharged: ^2.1.1
+  build_runner: ^2.1.11
+  build_web_compilers: ^3.2.3
+  pin_code_fields: ^7.4.0
+  fl_chart: ^0.61.0
 
 dev_dependencies:
   flutter_test:

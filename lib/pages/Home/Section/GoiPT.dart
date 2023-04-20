@@ -1,21 +1,23 @@
 import 'package:easy_pagination_datatable/datatable.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Services/prodCategoryService.dart';
-import 'package:frontend/pages/Home/DataSource/LoaiThietBi.source.dart';
-import 'package:frontend/pages/Home/Form/LoaiThietBi.form.dart';
-import 'package:frontend/pages/Home/Form/ThietBi.form.dart';
+import 'package:frontend/pages/Home/DataSource/GoiTap.source.dart';
+import 'package:frontend/pages/Home/Form/GoiTap.form.dart';
 
-class LoaiThietBiSection extends StatefulWidget {
-  const LoaiThietBiSection({super.key});
+import '../DataSource/GoiPT.source.dart';
+import '../Form/GoiPT.form.dart';
+
+class GoiPTSection extends StatefulWidget {
+  const GoiPTSection({super.key});
 
   @override
-  State<LoaiThietBiSection> createState() => _LoaiThietBiSectionState();
+  State<GoiPTSection> createState() => _GoiPTSectionState();
 }
 
-class _LoaiThietBiSectionState extends State<LoaiThietBiSection> {
+class _GoiPTSectionState extends State<GoiPTSection> {
   var rowsPerPage = 15;
 
-  final source = LoaiThietBiSource();
+  final source = GoiPTSource();
 
   var sortIndex = 0;
 
@@ -28,27 +30,28 @@ class _LoaiThietBiSectionState extends State<LoaiThietBiSection> {
   }
 
   DataRow getRow(int index){
-    final loaithietbi = source.lastDetails!.rows[index];
+    final goitap = source.lastDetails!.rows[index];
     return (
         DataRow(
             cells: [
-              DataCell(Text(loaithietbi["_id"], style: const TextStyle(fontSize: 10),)),
-              DataCell(Text(loaithietbi["ten"],style: const TextStyle(fontSize: 10))),
+              DataCell(Text(goitap["ten"], style: const TextStyle(fontSize: 10),)),
+              DataCell(Text(goitap["gia"].toString(),style: const TextStyle(fontSize: 10))),
+              DataCell(Text(goitap["songay"].toString(),style: const TextStyle(fontSize: 10))),
               DataCell(Row(
                 children: [
                   IconButton(icon: const Icon(Icons.edit), onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoaiThietBiForm(), settings: RouteSettings(
-                        arguments: loaithietbi
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => GoiPTForm(), settings: RouteSettings(
+                        arguments: goitap
                     )));
                   },),
                   IconButton(icon: const Icon(Icons.delete), onPressed: (){
                     showDialog(context: context, builder: (BuildContext context){
                       return AlertDialog(
                         title: Text("Xác Nhận Xóa"),
-                        content: Text("Bạn có chắc chắn muốn xóa thiết bị này không", style: TextStyle(fontSize: 20),),
+                        content: Text("Bạn có chắc chắn muốn xóa gói pt này không", style: TextStyle(fontSize: 20),),
                         actions: [
                           ElevatedButton(onPressed: (){
-                            delete(loaithietbi["_id"], context);
+                            delete(goitap["_id"], context);
                           },
                               style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.red)),
                               child: Text("Xóa"))
@@ -67,7 +70,7 @@ class _LoaiThietBiSectionState extends State<LoaiThietBiSection> {
     sortAsc = asc;
   });
   void navigateToForm(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoaiThietBiForm(), settings: const RouteSettings(
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const GoiPTForm(), settings: const RouteSettings(
         arguments: <String, dynamic>{}
     )));
   }
@@ -79,7 +82,7 @@ class _LoaiThietBiSectionState extends State<LoaiThietBiSection> {
       child: SingleChildScrollView(
         child: Column(children: [
           Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-            const Text("Loại Thiết Bị", style: TextStyle(fontSize: 25)),
+            const Text("Gói PT", style: TextStyle(fontSize: 25)),
             Container(
               padding: const EdgeInsets.only(left: 20),
               child: IconButton(onPressed: (){
@@ -104,8 +107,9 @@ class _LoaiThietBiSectionState extends State<LoaiThietBiSection> {
               }
             },
             columns: [
-              DataColumn(label: const Text('ID'), onSort: setSort),
               DataColumn(label: const Text('Tên'), onSort: setSort),
+              DataColumn(label: const Text('Giá'), onSort: setSort),
+              DataColumn(label: const Text('Số ngày'), onSort: setSort),
               const DataColumn(label: Text(""))
             ],
           )

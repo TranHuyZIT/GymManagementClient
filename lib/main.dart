@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/login",
       routes: {
         "/login": (context) => SafeArea(
-            minimum: const EdgeInsets.fromLTRB(0, 20, 0, 0), child: Login()),
+            minimum: const EdgeInsets.fromLTRB(0, 20, 0, 0), child: LoginScreen()),
         "/home": (context) => const MyHomePage(title: "Gym Management"),
         "/invoices": (context) => InvoicesPage()
       },

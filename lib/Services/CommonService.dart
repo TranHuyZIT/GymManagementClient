@@ -13,7 +13,15 @@ class CommonService {
   }
   static String convertISOToDateOnly(String isoString){
     return DateFormat('dd/MM/yyyy').format(DateTime.parse(isoString));
-
+  }
+  static String convertISOToDateWithoutYear(String isoString){
+    return DateFormat('dd/MM').format(DateTime.parse(isoString));
+  }
+  static String convertISOToTimeOnly(String isoString){
+    return DateFormat('hh:mm - EEEE').format(DateTime.parse(isoString));
+  }
+  static String convertISOToTime(String isoString){
+    return DateFormat('hh:mm').format(DateTime.parse(isoString));
   }
   static String formatVND(String money){
     return NumberFormat("#,##0đ", "vi_VN").format(int.parse(money));

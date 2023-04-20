@@ -14,7 +14,7 @@ class ThietBiPhongSection extends StatefulWidget {
 }
 
 class _ThietBiPhongSectionState extends State<ThietBiPhongSection> {
-  var rowsPerPage = 15;
+  var rowsPerPage = 5;
 
   final source = ThietBiPhongSource();
   var sortIndex = 0;
@@ -32,16 +32,10 @@ class _ThietBiPhongSectionState extends State<ThietBiPhongSection> {
     return (
         DataRow(
             cells: [
-              DataCell(Text(thietbiphong["_id"], style: const TextStyle(fontSize: 10),)),
               DataCell(Text(thietbiphong["ten"],style: const TextStyle(fontSize: 10))),
               DataCell(Text(thietbiphong["tinhtrang"],style: const TextStyle(fontSize: 10))),
               DataCell(Row(
                 children: [
-                  IconButton(icon: const Icon(Icons.edit), onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ThietBiForm(), settings: RouteSettings(
-                        arguments: thietbiphong
-                    )));
-                  },),
                   IconButton(icon: const Icon(Icons.delete), onPressed: (){
                     showDialog(context: context, builder: (BuildContext context){
                       return AlertDialog(
@@ -90,7 +84,7 @@ class _ThietBiPhongSectionState extends State<ThietBiPhongSection> {
             sortColumnIndex: sortIndex,
             showFirstLastButtons: true,
             rowsPerPage: rowsPerPage,
-            availableRowsPerPage: const [10, 15],
+            availableRowsPerPage: const [5, 10],
             onRowsPerPageChanged: (newRowsPerPage) {
               if (newRowsPerPage != null) {
                 setState(() {
@@ -99,7 +93,6 @@ class _ThietBiPhongSectionState extends State<ThietBiPhongSection> {
               }
             },
             columns: [
-              DataColumn(label: const Text('ID'), onSort: setSort),
               DataColumn(label: const Text('Tên'), onSort: setSort),
               DataColumn(label: const Text('Tình Trạng'), onSort: setSort),
               const DataColumn(label: Text(""))
