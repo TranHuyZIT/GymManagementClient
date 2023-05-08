@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Services/CommonService.dart';
+import 'package:frontend/pages/Invoices/Forms/HoaDon.view.dart';
 
 
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -18,8 +19,12 @@ class HoaDon extends StatefulWidget{
 class _HoaDonState extends State<HoaDon> {
   final PagingController<int, dynamic> _pagingController =
   PagingController(firstPageKey: 0);
+  final searchTextController = TextEditingController(text: "");
   static const _pageSize = 5;
+  String search = "";
+  bool clearCurrent = false;
 
+  bool? isChecked = false;
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -34,6 +39,10 @@ class _HoaDonState extends State<HoaDon> {
         'offset': pageKey.toString(),
         'pageSize': _pageSize.toString(),
       };
+      queryParameter.addAll({"checked": isChecked.toString()});
+      if (search != ""){
+        queryParameter.addAll({"name": search});
+      }
       final newItems = await HoaDonService.getAll(queries: queryParameter);
       final isLastPage = newItems["data"].length < _pageSize;
       if (isLastPage) {
@@ -57,16 +66,65 @@ class _HoaDonState extends State<HoaDon> {
               onRefresh: _refresh,
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonForm(), settings: const RouteSettings(
-                            arguments: <String, dynamic>{}
-                        )));
-                      }, label: const Text("Thêm"), icon: const Icon(Icons.add),),
-                      const SizedBox(width: 8,)
-                    ],
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButton(onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonForm(), settings: const RouteSettings(
+                              arguments: <String, dynamic>{}
+                          )));
+                        }, child: const Text("Lập Mới")),
+                        const SizedBox(width: 46,),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 20, 15, 0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Text("Đã duyệt", style: TextStyle(fontSize: 12),),
+                                Checkbox(
+                                  value: isChecked,
+                                  onChanged: (bool? newValue) {
+                                    setState(() {
+                                      isChecked = newValue;
+                                    });
+                                    _pagingController.refresh();
+                                  },
+                                ),
+                              ],
+                            )
+                        ),
+                        SizedBox(
+                          width: 130,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: "Tìm theo tên khách"
+                            ),
+                            controller: searchTextController,
+                            onChanged: (value){
+                              setState(() {
+                                search = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 50,
+                          child: IconButton(onPressed: (){
+                            _pagingController.refresh();
+                          }, icon: const Icon(Icons.search)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+
+                      ],
+                    ),
                   ),
                   Expanded(child: PagedListView<int, dynamic>(
                     pagingController: _pagingController,
@@ -86,8 +144,8 @@ class _HoaDonState extends State<HoaDon> {
                                 subtitle: Text('Tổng tiền: ${item["tongtien"].toString()}'),
                                 trailing: Column(
                                   children: [
-                                    const Text('Nhân viên'),
-                                    Text('${item["manv"]["ten"]} # ${item["manv"]["id"]}'),
+                                    const Text('Khách'),
+                                    Text('${item["khach"]["ten"]} # ${item["khach"]["id"]}'),
                                   ],
                                 ),
                               ),
@@ -138,14 +196,14 @@ class _HoaDonState extends State<HoaDon> {
     );
   }
   Future <void> _refresh()async {
-    initState();
+    _pagingController.refresh();
   }
   void delete(String id, context)async{
     var jsonResponse = await HoaDonService.delete(id);
     CommonService.popUpMessage("Xóa hóa đơn thành công", context);
   }
   void view(hoadon){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonForm(), settings: RouteSettings(
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HoaDonView(), settings: RouteSettings(
         arguments: hoadon
     )));
   }

@@ -44,10 +44,9 @@ class _LoaiThietBiFormState extends State<LoaiThietBiForm> {
         return;
       }
       else{
-        dynamic response = await ThietBiService.update({
+        dynamic response = await ProductCategoryService.update({
           "ten": name,
-          "_id": id
-        }, context);
+        }, id, context);
         setState(() {
           name = "";
           id = "";

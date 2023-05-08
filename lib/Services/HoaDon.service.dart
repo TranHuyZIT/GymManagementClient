@@ -3,18 +3,31 @@ import 'dart:convert' as convert;
 import '../request.dart';
 
 class HoaDonService{
-  static Future<Map<String, dynamic>> getAll({queries}) async{
+  static Future<Map<String, dynamic>> getAll({queries}) async {
+    try {
+      Response response = await RequestUtil.request(
+          "get", "/hoadon", queries: queries);
+      var jsonResponse = convert.jsonDecode(response.body) as Map<
+          String,
+          dynamic>;
+      return jsonResponse;
+    }
+    catch (e) {
+      return <String, dynamic>{};
+    }
+  }
+
+  static Future<Map<String,dynamic>> duyet (id) async {
     try{
-      Response response = await RequestUtil.request("get", "/hoadon", queries: queries);
+      Response response = await RequestUtil.request("post", "/hoadon/duyet/${id}");
       var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
       return jsonResponse;
     }
     catch(e){
-      return <String, dynamic>{};
+      return <String,dynamic>{};
     }
-
-
   }
+
   static Future<Map<String, dynamic>> add(body)async {
     try{
 
@@ -30,7 +43,7 @@ class HoaDonService{
   static Future<Map<String, dynamic>> delete(id)async {
     try{
 
-      Response response = await RequestUtil.request("post", "/hoadon/$id");
+      Response response = await RequestUtil.request("delete", "/hoadon/$id");
       var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
       return jsonResponse;
     }

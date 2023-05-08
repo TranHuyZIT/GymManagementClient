@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/Authentication/UserTypeSelection.dart';
+import 'package:frontend/pages/Invoices/InvoicesPage.dart';
 import 'package:localstorage/localstorage.dart';
 import 'dart:convert' as convert;
 import '../../core/Colors.Hex_Color.dart';
@@ -30,6 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController userNameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  @override
+  void initState(){
+    print(storage.getItem("token"));
+    if (storage.getItem("token") != null) {
+      navigateToHomepage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         FadeAnimation(
                           delay: 0.8,
-                          child: Image.network(
-                            "https://cdni.iconscout.com/illustration/premium/thumb/job-starting-date-2537382-2146478.png",
+                          child: Image.asset(
+                            "assets/images/job.png",
                             width: 100,
                             height: 100,
                           ),
@@ -300,7 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
             content: Text(msg)));
   }
   void navigateToHomepage(){
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const MyHomePage(title: "Trần Huy Gym"))
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InvoicesPage())
         , ModalRoute.withName("/Home"));
   }
   void navigateToUserSelection(){

@@ -62,7 +62,7 @@ class _CustomerFormState extends State<CustomerForm> {
   void save(context) async{
     if (_formKey.currentState!.validate()){
       if (id == ""){
-        Map<String, dynamic> response = await CustomerService.add({
+        Map<String, dynamic> response = await CustomerService.tao({
           "ten": name,
           "ngaysinh": ngaysinh?.toIso8601String(),
           "sdt": sdt,
@@ -73,6 +73,7 @@ class _CustomerFormState extends State<CustomerForm> {
           CommonService.popUpMessage(response["message"], context);
           return;
         }
+        print(response);
         CommonService.popUpMessage("Thêm khách hàng thành công", context);
         Navigator.pop(context);
         return;

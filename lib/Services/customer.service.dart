@@ -27,6 +27,18 @@ class CustomerService{
 
 
   }
+  static Future<Map<String, dynamic>> tao(body, context)async {
+    try{
+
+      Response response = await RequestUtil.request("post", "/khach/tao", body: convert.jsonEncode(body), encoded:true);
+      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      return jsonResponse;
+    }
+    catch(e){
+      CommonService.popUpMessage("Có lỗi xảy ra", context);
+      return <String, dynamic>{};
+    }
+  }
   static Future<Map<String, dynamic>> add(body, context)async {
     try{
 

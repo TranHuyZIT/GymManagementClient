@@ -100,8 +100,8 @@ class _SignupPTScreenState extends State<SignupPTScreen> {
                       children: [
                         FadeAnimation(
                           delay: 0.8,
-                          child: Image.network(
-                            "https://cdni.iconscout.com/illustration/premium/thumb/job-starting-date-2537382-2146478.png",
+                          child: Image.asset(
+                            "assets/images/job.png",
                             width: 100,
                             height: 100,
                           ),
