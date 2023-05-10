@@ -7,6 +7,8 @@ import 'package:frontend/Services/Log.service.dart';
 import 'package:frontend/Services/customer.service.dart';
 import 'dart:core';
 
+import '../../Shared/BottomNavigationBar.dart';
+
 final _formKey = GlobalKey<FormState>();
 class CheckInView extends StatefulWidget{
   CheckInView({super.key, required this.customerId});
@@ -69,7 +71,7 @@ class _CheckInViewState extends State<CheckInView> with TickerProviderStateMixin
     if (loading) {
       return Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(title: const Text("Trần Huy Gym"),),
+        appBar: AppBarShared(),
         body: Column(children: [],),
       );
     }

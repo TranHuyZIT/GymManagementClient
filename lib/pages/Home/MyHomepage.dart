@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.indigo,
           title: Text(widget.title),
           bottom: const TabBar(tabs: [
             Tab(text: "Trang Thiết Bị"),

@@ -25,4 +25,15 @@ class NhanVienService{
       return <String, dynamic>{};
     }
   }
+  static Future<Map<String, dynamic>> update(id, body) async{
+    try{
+      Response response = await RequestUtil.request("put", "/nhanvien/${id.toString()}", body: convert.jsonEncode(body), encoded:true);
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse;
+    }
+    catch(e){
+      print(e);
+      return <String, dynamic>{};
+    }
+  }
 }

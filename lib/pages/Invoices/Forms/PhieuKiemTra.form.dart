@@ -8,6 +8,7 @@ import 'package:frontend/Services/thietbiphong.service.dart';
 import 'dart:convert' as convert;
 import '../../../Services/PhieuNhap.service.dart';
 import '../../../Services/phieukiemtra.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 final _formKey = GlobalKey<FormState>();
 class PhieuKiemTraForm extends StatefulWidget{
   @override
@@ -97,7 +98,7 @@ class _PhieuKiemTraFormState extends State<PhieuKiemTraForm> {
     return (
         Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: AppBar(title: const Text("Trần Huy Gym"),),
+          appBar: AppBarShared(),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),

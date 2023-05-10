@@ -14,6 +14,7 @@ import 'dart:convert' as convert;
 import '../../../Services/HoaDon.service.dart';
 import '../../../Services/PhieuNhap.service.dart';
 import '../../../Services/phieukiemtra.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 final _formKey = GlobalKey<FormState>();
 class HoaDonForm extends StatefulWidget{
   @override
@@ -216,7 +217,7 @@ class _HoaDonFormState extends State<HoaDonForm> with TickerProviderStateMixin {
     return (
         Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: AppBar(title: const Text("Trần Huy Gym"),),
+          appBar: AppBarShared(),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
@@ -291,7 +292,7 @@ class _HoaDonFormState extends State<HoaDonForm> with TickerProviderStateMixin {
                                       child: ElevatedButton(onPressed: (){
                                         _selectDate(context);
                                       } ,
-                                          style: ButtonStyle(backgroundColor:  MaterialStateProperty.all(Colors.blue)),
+                                          style: const ButtonStyle(),
                                           child: const Text("Chọn ngày")),
                                     )
                                   ],

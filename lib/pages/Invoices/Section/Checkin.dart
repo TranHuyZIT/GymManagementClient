@@ -1,6 +1,7 @@
 import 'package:easy_pagination_datatable/datatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/Shared/BottomNavigationBar.dart';
 import 'package:frontend/pages/Users/Forms/Customer.form.dart';
 import 'package:frontend/pages/Users/Sources/Customer.source.dart';
 
@@ -94,7 +95,7 @@ class _CheckInSectionState extends State<CheckInSection> {
     return (
         Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: const Text("Trần Huy Gym")),
+          appBar: AppBarShared(),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.all(20),

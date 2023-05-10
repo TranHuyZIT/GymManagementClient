@@ -16,7 +16,19 @@ class LichHDService{
       return <String, dynamic>{};
     }
   }
-
+  static Future<Map<String, dynamic>> getOneForPT() async {
+    try{
+      Response response = await RequestUtil.request("get", "/lichhd/pt");
+      var jsonResponse = convert.jsonDecode(response.body) as Map<
+          String,
+          dynamic>;
+      return jsonResponse;
+    }
+    catch(e){
+      print(e);
+      return <String, dynamic>{};
+    }
+  }
   static Future<Map<String, dynamic>> getAll({queries}) async{
     try{
       Response response = await RequestUtil.request("get", "/lichhd", queries: queries);

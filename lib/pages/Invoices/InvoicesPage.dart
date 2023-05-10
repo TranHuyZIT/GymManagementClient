@@ -25,9 +25,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Trần Huy Gym"),
-      ),
+      appBar: AppBarShared(),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: FractionallySizedBox(

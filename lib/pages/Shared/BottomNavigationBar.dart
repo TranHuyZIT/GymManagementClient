@@ -5,6 +5,21 @@ import 'package:frontend/pages/Stats/Stats.Page.dart';
 import '../Home/MyHomepage.dart';
 import '../Invoices/InvoicesPage.dart';
 import '../Users/UsersPage.dart';
+class AppBarShared extends StatelessWidget with PreferredSizeWidget{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return AppBar(
+      backgroundColor: Colors.indigo,
+      title: const Text("Trần Huy Gym"),
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+}
 
 class BottomNavigationShared extends StatelessWidget {
    BottomNavigationShared({super.key, this.currentIndex});
@@ -14,26 +29,27 @@ class BottomNavigationShared extends StatelessWidget {
     // TODO: implement build
     return (
         BottomNavigationBar(
+          backgroundColor: Colors.indigo,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.feed),
               label: 'Phiếu Lập',
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.indigo,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.fitness_center),
               label: 'Phòng Tập',
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.indigo,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bar_chart),
               label: 'Thống Kê',
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.indigo,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Quản Trị',
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.indigo,
             ),
           ],
           currentIndex: currentIndex ?? 0,

@@ -10,6 +10,7 @@ import 'dart:convert' as convert;
 import '../../../Services/HoaDon.service.dart';
 import '../../../Services/PhieuNhap.service.dart';
 import '../../../Services/phieukiemtra.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 final _formKey = GlobalKey<FormState>();
 class HoaDonView extends StatefulWidget{
   @override
@@ -115,8 +116,9 @@ class _HoaDonViewState extends State<HoaDonView> with TickerProviderStateMixin {
           text: CommonService.convertISOToDateOnly(DateTime.tryParse(currentData["ngaylap"]).toString())
       );
       generateTabe(_tabController.index, currentData, "dkytap", ["Ngày Đăng Ký", "Ngày Hết Hạn"]);
+      print(currentData);
       setState(() {
-        nhanvien = currentData["manv"];
+        nhanvien =  currentData["manv"] ?? <String, dynamic>{};
         ngaylap = DateTime.tryParse(currentData["ngaylap"]);
         data = currentData;
         initialized = true;
@@ -125,7 +127,7 @@ class _HoaDonViewState extends State<HoaDonView> with TickerProviderStateMixin {
     return (
         Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: AppBar(title: const Text("Trần Huy Gym"),),
+          appBar: AppBarShared(),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
@@ -163,7 +165,7 @@ class _HoaDonViewState extends State<HoaDonView> with TickerProviderStateMixin {
                                   initialValue: manv,
                                   decoration:  InputDecoration(
                                       icon: const Icon(Icons.person),
-                                      labelText: '${nhanvien["ten"]} ',
+                                      labelText: '${nhanvien["ten"] ?? "Chưa có"} ',
                                       helperText: 'Nhân viên'
                                   ),
                                 ),

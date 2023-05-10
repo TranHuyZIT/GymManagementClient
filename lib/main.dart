@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "BeVietnamPro"),
+      theme: ThemeData(primarySwatch: Colors.indigo, fontFamily: "BeVietnamPro" ),
       initialRoute: "/login",
       routes: {
         "/login": (context) => SafeArea(

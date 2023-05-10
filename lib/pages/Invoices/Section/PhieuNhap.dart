@@ -5,6 +5,7 @@ import 'package:frontend/pages/Invoices/Forms/PhieuNhap.form.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../Services/PhieuNhap.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 
 class PhieuNhap extends StatefulWidget{
   const PhieuNhap({super.key});
@@ -52,7 +53,7 @@ class _PhieuNhapState extends State<PhieuNhap> {
     // TODO: implement build
     return (
       Scaffold(
-        appBar: AppBar(title: const Text("Trần Huy Gym"),),
+        appBar: AppBarShared(),
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: Column(

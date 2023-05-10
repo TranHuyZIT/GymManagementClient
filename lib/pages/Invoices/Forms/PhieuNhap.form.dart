@@ -5,6 +5,7 @@ import 'package:frontend/Services/CommonService.dart';
 import 'package:frontend/Services/thietbi.service.dart';
 import 'dart:convert' as convert;
 import '../../../Services/PhieuNhap.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 final _formKey = GlobalKey<FormState>();
 class PhieuNhapForm extends StatefulWidget{
   @override
@@ -90,7 +91,7 @@ class _PhieuNhapFormState extends State<PhieuNhapForm> {
     return (
       Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(title: const Text("Trần Huy Gym"),),
+        appBar: AppBarShared(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
@@ -148,7 +149,7 @@ class _PhieuNhapFormState extends State<PhieuNhapForm> {
                                     side: BorderSide(color: Colors.grey),
                                   ),
                                 ),
-                              ):  ButtonStyle(backgroundColor:  MaterialStateProperty.all(Colors.blue)),
+                              ):  ButtonStyle(),
                                   child: const Text("Chọn ngày")),
                             )
                           ],

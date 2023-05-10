@@ -8,6 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../Services/HoaDon.service.dart';
 import '../../../Services/LichHD.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 import '../Forms/HoaDon.form.dart';
 import '../Forms/LichHD.form.dart';
 
@@ -55,7 +56,7 @@ class _LichHDState extends State<LichHD> {
     // TODO: implement build
     return (
         Scaffold(
-            appBar: AppBar(title: const Text("Trần Huy Gym"),),
+            appBar: AppBarShared(),
             body: RefreshIndicator(
               onRefresh: _refresh,
               child: Column(

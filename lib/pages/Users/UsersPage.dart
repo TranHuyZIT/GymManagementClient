@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Services/NhanVien.service.dart';
 import 'package:frontend/pages/Shared/BottomNavigationBar.dart';
 import 'package:frontend/pages/Users/Section/Customer.section.dart';
 import 'package:frontend/pages/Users/Section/NhanVien.section.dart';
@@ -18,7 +19,9 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  dynamic identity;
+  Map<String, dynamic> identity = {
+
+  };
   bool loading = true;
   @override
   void initState() {
@@ -28,6 +31,7 @@ class _UsersPageState extends State<UsersPage> {
         setState(() {
            identity = jsonResponse["info"];
         });
+        print(identity);
       }
     }
     getIdentity();
@@ -36,11 +40,21 @@ class _UsersPageState extends State<UsersPage> {
     });
     super.initState();
   }
+  void _saveProfile() async{
+    var jsonResponse = await NhanVienService.update(identity["_id"], identity);
+    if (jsonResponse.containsKey("message")){
+      CommonService.popUpMessage(jsonResponse["message"], context);
+      return;
+    }
+    Navigator.pop(context);
+    CommonService.popUpMessage("Cập nhật thành công", context);
+    initState();
+  }
   @override
   Widget build(BuildContext context) {
     if (!loading) {
       return Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Trần Huy Gym"),
         ),
@@ -64,10 +78,59 @@ class _UsersPageState extends State<UsersPage> {
                 color: Colors.black,
               ),
               Row(
-                children: const [
+                children: [
                   Expanded(
                     child: Card(
                       child: ListTile(
+                        onTap: (){
+                          showDialog(context: context, builder: (context) =>
+                              AlertDialog(
+                                title: const Text("Cập Nhật Thông Tin"),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: [
+                                      TextFormField(
+                                        initialValue: identity["ten"],
+                                        decoration: const InputDecoration(
+                                            labelText: "Tên",
+                                            icon: Icon(Icons.tag),
+                                            helperText: 'VD: Trần Gia Huy'
+                                        ),
+                                        onChanged: (value){
+                                          setState(() {
+                                            identity["ten"] = value;
+                                          });
+                                        },
+                                      ),
+                                      TextFormField(
+                                        keyboardType: const TextInputType.numberWithOptions(),
+                                        initialValue: identity["sdt"],
+                                        decoration: const InputDecoration(
+                                            labelText: "SĐT",
+                                            icon: Icon(Icons.phone),
+                                            helperText: 'VD: 0939067106'
+                                        ),
+                                        onChanged: (value){
+                                          setState(() {
+                                            identity["sdt"] = value;
+                                          });
+                                        },
+                                      ),
+                                      ElevatedButton(onPressed: (){
+                                        _saveProfile();
+                                      },
+                                          style:
+                                          const ButtonStyle(
+                                              backgroundColor:
+                                              MaterialStatePropertyAll
+                                                (Colors.indigo)),
+                                          child: const Text("Lưu"))
+                                    ],
+                                  ),
+                                ),
+                              )
+                          );
+                        },
                         leading: Icon(Icons.edit),
                         title: Text("Cập nhật thông tin cá nhân"),
                       ),

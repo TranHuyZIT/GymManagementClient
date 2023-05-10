@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/PT/SchedulePT.dart';
+import 'package:frontend/Services/Auth.service.dart';
 import 'package:frontend/pages/Authentication/UserTypeSelection.dart';
 import 'package:frontend/pages/Invoices/InvoicesPage.dart';
 import 'package:localstorage/localstorage.dart';
@@ -230,6 +232,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     String token = convert.jsonDecode(response.body);
                                     storage.setItem('token', token);
                                     popUpMessage("Đăng nhập thành công");
+                                    var identity = await AuthService.getIdentity();
+                                    print(identity);
+                                    if (identity["lapt"] == true){
+                                      navigateToPT();
+                                      return;
+                                    }
                                     navigateToHomepage();
                                   }
                                   else{
@@ -310,6 +318,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void navigateToHomepage(){
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InvoicesPage())
         , ModalRoute.withName("/Home"));
+  }
+  void navigateToPT(){
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SchedulePT())
+        , ModalRoute.withName("/admin/schedule"));
   }
   void navigateToUserSelection(){
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserTypeSelection()));

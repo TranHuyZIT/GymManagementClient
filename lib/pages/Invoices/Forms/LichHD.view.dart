@@ -12,6 +12,7 @@ import '../../../Services/LichHD.service.dart';
 import '../../../Services/PhieuNhap.service.dart';
 import '../../../Services/customer.service.dart';
 import '../../../Services/phieukiemtra.service.dart';
+import '../../Shared/BottomNavigationBar.dart';
 final _formKey = GlobalKey<FormState>();
 class LichHDView extends StatefulWidget{
   var currentData;
@@ -134,7 +135,7 @@ class _LichHDViewState extends State<LichHDView> {
     return (
         Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: AppBar(title: const Text("Trần Huy Gym"),),
+          appBar: AppBarShared(),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
